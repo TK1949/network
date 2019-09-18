@@ -8,7 +8,9 @@ public enum MessageCode {
     nan(-1),
 
     ping(0x0),
-    pong(0x1);
+    pong(0x1),
+
+    test(0x90);
 
     public final int code;
 

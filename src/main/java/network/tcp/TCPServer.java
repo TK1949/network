@@ -27,7 +27,7 @@ public class TCPServer {
 
     private ChannelGroup channels;
 
-    TCPServer(EventLoopGroup boss, EventLoopGroup worker, int port) {
+    public TCPServer(EventLoopGroup boss, EventLoopGroup worker, int port) {
         this.boos = boss;
         this.worker = worker;
         this.port = port;
@@ -77,6 +77,14 @@ public class TCPServer {
                 msg.clear();
 
                 MessageDecoder md = new MessageDecoder(code);
+
+                switch (md.getCode()) {
+                    case test:
+                        System.out.println(new String(md.readByteArray()));
+                        break;
+                    default:
+                        break;
+                }
 
                 System.out.println(ctx.channel().remoteAddress() + " : " + md.getCode());
             } catch (Exception e) {

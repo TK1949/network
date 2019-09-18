@@ -90,6 +90,14 @@ public class TCPClient {
 
                 MessageDecoder md = new MessageDecoder(code);
 
+                switch (md.getCode()) {
+                    case test:
+                        System.out.println(new String(md.readByteArray()));
+                        break;
+                    default:
+                        break;
+                }
+
                 System.out.println(ctx.channel().remoteAddress() + " : " + md.getCode());
             } catch (Exception e) {
                 logger.error("Client -> channelRead0 {}", e.getMessage());
