@@ -42,11 +42,12 @@ public class TCPServer {
          .childHandler(new ChannelInitializer<SocketChannel>() {
              @Override
              protected void initChannel(SocketChannel ch) {
-                 ch.pipeline().addLast(new ReadTimeoutHandler(60))
-                              .addLast(new WriteTimeoutHandler(60))
-                              .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 8, 0, 8))
-                              .addLast(new LengthFieldPrepender(8))
-                              .addLast(new SocketFrameHandler());
+                 ch.pipeline().addLast(
+                         new ReadTimeoutHandler(60),
+                         new WriteTimeoutHandler(60),
+                         new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 8, 0, 8),
+                         new LengthFieldPrepender(8),
+                         new SocketFrameHandler());
              }
          }).bind(port).sync().channel();
     }
@@ -101,6 +102,7 @@ public class TCPServer {
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
+            cause.printStackTrace();
         }
     }
 }

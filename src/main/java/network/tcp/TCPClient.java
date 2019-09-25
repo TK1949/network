@@ -10,6 +10,8 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import network.message.handshake.Ping;
 import network.message.live.MessageDecoder;
 import org.slf4j.Logger;
@@ -48,13 +50,13 @@ public class TCPClient {
                           .handler(new ChannelInitializer<SocketChannel>() {
                               @Override
                               protected void initChannel(SocketChannel ch) {
-                                  ch.pipeline().addLast(new IdleStateHandler(0, 0, 5000, TimeUnit.MILLISECONDS))
-                                               .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 8, 0, 8))
-                                               .addLast(new LengthFieldPrepender(8))
-                                               .addLast(new SocketFrameHandler());
+                                  ch.pipeline().addLast(
+                                          new IdleStateHandler(0, 0, 5000, TimeUnit.MILLISECONDS),
+                                          new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 8, 0, 8),
+                                          new LengthFieldPrepender(8),
+                                          new SocketFrameHandler());
                               }
                           }).connect().sync().channel();
-
         } catch (Exception e) {
             logger.error("Client -> start {}", e.getMessage());
             reconnection = 8;
